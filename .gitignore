@@ -1,3 +1,6 @@
 
 CountryCapitalList/scrape_capitals.ipynb
 CountryCapitalList/countries_capitals.xlsx
+WeatherApp/config.txt
+WeatherApp/config.ini
+WeatherApp/__pycache__/config.cpython-39.pyc
