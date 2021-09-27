@@ -54,7 +54,7 @@ def get_weather_dict(city):
     except exceptions.NotFoundError:
         # pass if city weather not found
         print(city)
-        pass
+        return {}
     except exceptions.TimeoutError:
         time.sleep(60) # OpenWeatherAPI limits us to 60 calls/min. When a timeout error occurs, the function waits 60 secs and tries again
         observation = mgr.weather_at_place(city)
@@ -65,19 +65,18 @@ def get_weather_dict(city):
 # get weather dictionary for each capital and save pickle
 
 
-#current_weathers = {}
+current_weathers = {}
 #f=open('p.pickle', 'wb')
-with open('C:/Users/Malcolm/Weather/WeatherDashboard/WeatherApp/p.pickle', 'rb') as f:
-    current_weathers = pickle.load(f)
-#for city in capitals:
-#    current_weathers[city] = get_weather_dict(city)
+#with open('C:/Users/Malcolm/Weather/WeatherDashboard/WeatherApp/p.pickle', 'rb') as f:
+#    current_weathers = pickle.load(f)
+for city in capitals:
+    current_weathers[city] = get_weather_dict(city)
 
 del current_weathers['Ngerulmud'] #TODO: DELETE THIS AFTER TEST
-del current_weathers['Nukuʻalofa'] #TODO: DELETE THIS AFTER TEST
 
 
 #pickle.dump(current_weathers, f)
-f.close()
+#f.close()
 # connect to weather database
 conn = pg.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD)
 
