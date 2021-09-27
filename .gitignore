@@ -4,8 +4,4 @@ CountryCapitalList/countries_capitals.xlsx
 WeatherApp/config.txt
 WeatherApp/config.ini
 WeatherApp/__pycache__/config.cpython-39.pyc
-<<<<<<< Updated upstream
-=======
 CountryCapitalList/countries_capitals.xlsx
-*.xlsx
->>>>>>> Stashed changes

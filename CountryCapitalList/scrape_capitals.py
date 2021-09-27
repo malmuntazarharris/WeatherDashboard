@@ -44,15 +44,18 @@ sovereign_df.loc[sovereign_df['Country'].str.contains('\n').fillna(False), 'Coun
 sovereign_df['Country'].ffill(inplace=True)
 
 # remove all the text in parentheses
-sovereign_df['Country'] = sovereign_df['Country'].str.replace(r"\(.*\)","", regex=True)
-sovereign_df['Capital'] = sovereign_df['Capital'].str.replace(r"\(.*\)","", regex=True)
+sovereign_df['Country'] = sovereign_df['Country'].str.replace(r"\(.*\)", '', regex=True)
+sovereign_df['Capital'] = sovereign_df['Capital'].str.replace(r"\(.*\)", '', regex=True)
 
 # remove reverse single quotation marks
-sovereign_df['Capital'] = sovereign_df['Capital'].str.replace("ʻ","'", regex=False)
+sovereign_df['Capital'] = sovereign_df['Capital'].str.replace("ʻ", "'", regex=False)
 
 # remove the whitespaces in all strings of the dataframe
 sovereign_df_obj = sovereign_df.select_dtypes(['object'])
 sovereign_df[sovereign_df_obj.columns] = sovereign_df_obj.apply(lambda x: x.str.strip())
+
+# fix specific issue with capital of Palau: Ngerulmud does not have data in the openweather api, however the former capital Koror does
+sovereign_df["Capital"].replace('Ngerulmud', 'Koror', inplace=True, regex=False)
 
 # output an excel file of the dataframe
 sovereign_df.to_excel('C:/Users/Malcolm/Weather/WeatherDashboard/CountryCapitalList/countries_capitals.xlsx', index=False)

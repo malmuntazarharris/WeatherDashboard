@@ -8,7 +8,7 @@ import pickle # for testing without api pulls
 from config import config
 
 # list of weather data needed
-WEATHER_INFO = ('weather_code',
+WEATHER_INFO = ('weather_code', 
                 'reference_time',
                 'sunset_time',
                 'sunrise_time',
@@ -71,9 +71,6 @@ current_weathers = {}
 #    current_weathers = pickle.load(f)
 for city in capitals:
     current_weathers[city] = get_weather_dict(city)
-
-del current_weathers['Ngerulmud'] #TODO: DELETE THIS AFTER TEST
-
 
 #pickle.dump(current_weathers, f)
 #f.close()
