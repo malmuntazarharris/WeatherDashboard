@@ -1,79 +1,96 @@
 from pyowm.owm import OWM
 from pyowm.commons import exceptions
-import openpyxl as xl
 import psycopg2 as pg
 import time
-import datetime as dt
+import pandas as pd
+from weatherclasses import Country, City, Weather
+import os
 import pickle # for testing without api pulls
 from config import config
 
-# list of weather data needed
-WEATHER_INFO = ('weather_code', 
-                'reference_time',
-                'sunset_time',
-                'sunrise_time',
-                'clouds',
-                'rain',
-                'snow',
-                'wind',
-                'humidity',
-                'pressure',
-                'temperature',
-                'status',
-                'detailed_status')
-
 # get login dictionary and load login info
-login = config()
+login = config() 
 API_KEY = login['api_key']
 HOST = login['host']
 DATABASE = login['database']
 USER = login['user']
 PASSWORD = login['password']
 
-# get names of cities
-ws = xl.load_workbook('C:/Users/Malcolm/Weather/WeatherDashboard/CountryCapitalList/countries_capitals.xlsx').active
-first_column = ws['A'] # column with the capitals
-capitals = [first_column[value].value for value in range(1, len(first_column))]
-
-# construct weather manager
+# construct pyowm objects
 owm = OWM(API_KEY)
-mgr = owm.weather_manager()
+mgr = owm.weather_manager() # object to pull weather data
+reg = owm.city_id_registry() # object to pull city data
 
-def get_weather_dict(city):
-    """Returns the weather dictionary for a given city
+# load csv
+country_df = pd.read_csv('WeatherDashboard/data/countries-capitals.csv')
 
-    :param city: the name of the city
-    :type city: str
-    :returns: dictionary with weather information per OpenWeatherAPI
-    """
+# get names of countries
+country_names = country_df['country_name']
+
+# load pickle object with country and city objects
+countries = []
+cities = []
+objects = None
+if os.path.exists('C:/Users/Malcolm/Weather/WeatherDashboard/data/objects.pkl'):
+    with open('C:/Users/Malcolm/Weather/WeatherDashboard/data/objects.pkl', 'rb') as handle:
+        objects = pickle.load(handle)
+    countries = objects[0]
+    cities = objects[1]
+else:
+    # create country objects
+    for name in country_names:
+        cont = country_df.loc[country_df['country_name'] == name, 'continent_name'].iloc[0]
+        code = country_df.loc[country_df['country_name'] == name, 'country_code'].iloc[0]
+        countries.append(Country(name, code, cont))
+    # create city objects
+    for country in countries:
+        name = country_df.loc[country_df['country_name'] == str(country), 'capital_name'].iloc[0]
+        code = country_df.loc[country_df['country_name'] == str(country), 'country_code'].iloc[0]
+        try:
+            city_id = reg.ids_for(name, country=code, matching='like')[0][0]
+        except IndexError:
+            print((name, code, str(country)))
+        lat = country_df.loc[country_df['country_name'] == str(country), 'capital_latitude'].iloc[0]
+        lon = country_df.loc[country_df['country_name'] == str(country), 'capital_longitude'].iloc[0]
+        cities.append(City(name, country, lat, lon, city_id))
+    objects = (countries, cities)
+    # dump pickle
+    with open('C:/Users/Malcolm/Weather/WeatherDashboard/data/objects.pkl', 'wb') as handle:
+        pickle.dump(objects, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+# create weather objects
+weathers = []
+for city in cities:
+    weatherobj = Weather(city)
     try:
-        observation = mgr.weather_at_place(city)
+        observation = mgr.weather_at_id(city.city_id)
         weather = observation.weather
-        weather_dict = weather.to_dict()
-        current_weathers[city] = weather_dict
-    except exceptions.NotFoundError:
-        # pass if city weather not found
-        print(city)
-        return {}
     except exceptions.TimeoutError:
         time.sleep(60) # OpenWeatherAPI limits us to 60 calls/min. When a timeout error occurs, the function waits 60 secs and tries again
-        observation = mgr.weather_at_place(city)
+        observation = mgr.weather_at_id(city.city_id)
         weather = observation.weather
-        weather_dict = weather.to_dict()
-    return weather_dict
 
-# get weather dictionary for each capital and save pickle
+    weatherobj.weather_code = weather.weather_code
+    weatherobj.ref_time = weather.reference_time('iso')
+    weatherobj.sunset_time = weather.sunset_time('iso')
+    weatherobj.sunrise_time = weather.sunrise_time('iso')
+    weatherobj.cloud_per = weather.clouds
+    if '1h' in weather.rain.keys():
+        weatherobj.rain_1h = weather.rain['1h']
+    else:
+        weatherobj.rain_1h = 0
+    if '1h' in weather.snow.keys():
+        weatherobj.snow_1h = weather.snow['1h']
+    else:
+        weatherobj.snow_1h = 0
+    weatherobj.w_ms = weather.wind()['speed']
+    weatherobj.humid_per = weather.humidity
+    weatherobj.press_hpa = weather.barometric_pressure()['press']
+    weatherobj.temperature = weather.temperature('celsius')['temp']
+    weatherobj.status = weather.status
+    weatherobj.d_status = weather.detailed_status
+    weathers.append(weatherobj)
 
-
-current_weathers = {}
-#f=open('p.pickle', 'wb')
-#with open('C:/Users/Malcolm/Weather/WeatherDashboard/WeatherApp/p.pickle', 'rb') as f:
-#    current_weathers = pickle.load(f)
-for city in capitals:
-    current_weathers[city] = get_weather_dict(city)
-
-#pickle.dump(current_weathers, f)
-#f.close()
 # connect to weather database
 conn = pg.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD)
 
@@ -82,42 +99,12 @@ cur = conn.cursor() # create new cursor method
 
 # sql query to insert an individual city into the postgres database
 sql_query = """INSERT INTO 
-weather_data("city_name","weather_code","ref_time","sunset_time","sunrise_time","cloud_per","rain_1h","snow_1h","w_ms","w_deg",\
-"humid_per","press_hpa","sea_level","temperature","temp_min","temp_max","temp_feelslike","status","d_status")
-VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+weather_data("city_name","city_id","country_name","country_code","weather_code","ref_time","sunset_time","sunrise_time","cloud_per","rain_1h","snow_1h","w_ms",
+"humid_per","press_hpa","temperature","status","d_status")
+VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
 
-for city in current_weathers.keys():
-    if len(current_weathers[city]) == 0:
-        pass
-    weather_params = []
-    weather_params.append(city)
-    weather_dict = current_weathers[city]
-    for item in WEATHER_INFO:
-        try:
-            if 'time' in item: # condition for time conversion from unix epoch time to iso format
-                weather_params.append(dt.datetime.utcfromtimestamp(weather_dict[item]).isoformat())
-            elif item == 'rain':
-                weather_params.append(str(weather_dict[item]['1h']))
-            elif item == 'snow':
-                weather_params.append(str(weather_dict[item]['1h']))
-            elif item == 'wind':
-                weather_params.append(str(weather_dict[item]['speed']))
-                weather_params.append(str(weather_dict[item]['deg']))
-            elif item == 'pressure':
-                weather_params.append(str(weather_dict[item]['press']))
-                weather_params.append(str(weather_dict[item]['sea_level']))
-            elif item == 'temperature':
-                weather_params.append(str(weather_dict[item]['temp']))
-                weather_params.append(str(weather_dict[item]['temp_min']))
-                weather_params.append(str(weather_dict[item]['temp_max']))
-                weather_params.append(str(weather_dict['temperature']['feels_like']))
-            else:
-                weather_params.append(str(weather_dict[item]))
-
-        except KeyError:
-            weather_params.append("0")
-    cur.execute(sql_query, tuple(weather_params))
-        
+for obj in weathers:
+    cur.execute(sql_query, obj.to_tuple())  # TODO: increase the length of all the tables
 # commit sql transactions
 conn.commit()
 

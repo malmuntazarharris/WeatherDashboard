@@ -6,3 +6,8 @@ WeatherApp/config.ini
 WeatherApp/__pycache__/config.cpython-39.pyc
 CountryCapitalList/countries_capitals.xlsx
 src/test.ipynb
+*.ini
+config/config.ini
+src/__pycache__/config.cpython-39.pyc
+src/__pycache__/weatherclasses.cpython-39.pyc
+config/config.ini

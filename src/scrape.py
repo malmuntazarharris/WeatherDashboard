@@ -1,3 +1,15 @@
+"""This file are my attempts to scrape the country and capital details from multiple websites
+These attempts ran into a series of issues mainly because due to the vague and political definition of what
+exactly is a 'country' or a 'capital.' I've opted to pull from a singular source
+for consistency: http://techslides.com/list-of-countries-and-capitals
+
+The CSV's that were produced by this script are in the repository as:
+- WeatherDashboard/data/cont_names.csv
+- WeatherDashboard/data/alt_names.csv
+- WeatherDashboard/data/country_codes.csv
+- WeatherDashboard/data/capitals.csv
+"""
+
 import pandas as pd
 import numpy as np
 import requests
@@ -13,7 +25,7 @@ def remove_parens(df, columns):
         df[col] = df[col].str.replace(r"\[.*?\]", '', regex=True) # remove '[]'
 
 def scrape_cont():
-    continents = ['Africa', 'Asia', 'Europe', 'North America', 'South America', 'Oceania']
+    continents = ('Africa', 'Asia', 'Europe', 'North America', 'South America', 'Oceania')
 
     url = 'https://simple.wikipedia.org/wiki/List_of_countries_by_continents'
 
@@ -44,12 +56,33 @@ def scrape_cont():
             country = country.split(' - ')[0] # split at hyphen
             country = re.sub(r'\[.*?\]', '', country) # remove brackets
             country = re.sub(r'\(.*?\)', '', country) # remove parentheses
-            country = country.replace('*','') # remove askterisk
+            country = country.replace('*','').strip() # remove askterisk
             value_list[index] = country
 
     # create df and create csv 
     cont_df = pd.DataFrame([(continent, country) for (continent, l) in region_dict.items() for country in l], 
                  columns=['continent', 'country'])
+
+    # replace empty strings with nan
+    cont_df['country'].replace('', np.nan, inplace=True) 
+
+    # replace certain values to match other dataframes
+    cont_df['country'].replace("Côte d'Ivoire", 'Ivory Coast', inplace=True, regex=False)
+    cont_df['country'].replace('The Gambia', 'Gambia', inplace=True, regex=False)
+    cont_df['country'].replace('São Tomé and Príncipe', 'Sao Tome and Principe', inplace=True, regex=False)
+    cont_df['country'].replace('Republic of Ireland', 'Ireland', inplace=True, regex=False)
+    cont_df['country'].replace('North Macedonia', 'Macedonia', inplace=True, regex=False)
+    cont_df['country'].replace('Vatican City', 'Vatican', inplace=True, regex=False)
+    cont_df['country'].replace('US Virgin Islands', 'U.S. Virgin Islands', inplace=True, regex=False)
+    cont_df['country'].replace('Federated States of Micronesia', 'Micronesia', inplace=True, regex=False)
+
+    # drop nan and problem values
+    cont_df.dropna(inplace=True)
+    cont_df.drop(cont_df[cont_df['country'] == 'Russia Moscow'].index, inplace=True)
+    cont_df.drop(cont_df[cont_df['country'] == 'Navassa Island'].index, inplace=True)
+    cont_df.drop(cont_df[cont_df['country'] == 'French Guiana'].index, inplace=True)
+    cont_df.drop(cont_df[cont_df['country'] == 'South Georgia and the South Sandwich Islands'].index, inplace=True)
+
     cont_df.to_csv('WeatherDashboard/data/cont_names.csv', index=False, encoding='utf-8-sig')
 
 def scrape_alt_names():
@@ -86,28 +119,36 @@ def scrape_alt_names():
     alt_df['other_names'] = alt_df['other_names'].apply(list_strip)
 
     # remove parentheses in common_name
-    remove_parens(alt_df, ['common_name'])
+    remove_parens(alt_df, ['common_name']) 
 
     alt_df.to_csv('WeatherDashboard/data/alt_names.csv', index=False, encoding='utf-8-sig')
 
 def scrape_country_codes():
-    url = 'https://en.wikipedia.org/wiki/ISO_3166-1'
+    url = 'https://countrycode.org/'
 
     # TODO: delete once testing is complete, replace with proper verified SSL context https://stackoverflow.com/questions/50969583/pandas-raises-ssl-certificateerror-when-using-method-read-html-for-https-resourc/50970844
     context = ssl._create_unverified_context()
     response = request.urlopen(url, context=context)
     html = response.read()
 
-    code_df = pd.read_html(html)[1]
+    code_df = pd.read_html(html)[0]
 
     # drop last two columns
-    code_df.drop(columns=['Link to ISO 3166-2 subdivision codes', 'Independent'], inplace=True)
+    code_df.drop(columns=['AREA KM2', 'GDP $USD'], inplace=True)
 
     # rename columns
-    code_df.rename({'English short name (using title case)':'country', 'Alpha-2 code':'alpha_2_code', 'Alpha-3 code':'alpha_3_code', 'Numeric code':'num_code'}, axis='columns', inplace=True)
+    code_df.rename(columns={'COUNTRY':'country', 'COUNTRY CODE':'num_code', 'ISO CODES':'alpha_code', 'POPULATION':'population'}, inplace=True)
 
-    # remove all the text in parentheses and brackets
-    remove_parens(code_df, ['country', 'alpha_2_code', 'alpha_3_code'])
+    # split different country codes
+    code_df[['alpha_2_code','alpha_3_code']] = code_df.alpha_code.str.split("/",expand=True)
+    code_df.drop(columns='alpha_code', inplace=True)
+
+    # clean whitespace
+    code_df['alpha_2_code'] = code_df['alpha_2_code'].str.strip()
+    code_df['alpha_3_code'] = code_df['alpha_3_code'].str.strip()
+
+    # replace certain values
+    code_df['country'].replace('United States', 'United States of America', inplace=True, regex=False)
 
     code_df.to_csv('WeatherDashboard/data/country_codes.csv', index=False, encoding='utf-8-sig')
 
@@ -137,11 +178,16 @@ def scrape_capitals():
     capital_df_obj = capital_df.select_dtypes(['object'])
     capital_df[capital_df_obj.columns] = capital_df_obj.apply(lambda x: x.str.strip())
 
-    # fix specific issue with capital of Palau: Ngerulmud does not have data in the openweather api, however the former capital Koror does
+    # replace capitals that do not have data on OpenWeather or are spelled differently
     capital_df['capital'].replace('Ngerulmud', 'Koror', inplace=True, regex=False)
+    capital_df['capital'].replace("Sana'a", 'Sanaa', inplace=True, regex=False)
+
+    # drop countries that are not in other dataframes
+    capital_df.drop(capital_df[capital_df['capital'] == 'Adamstown'].index, inplace=True)
+    capital_df.drop(capital_df[capital_df['country'] == 'Alofi'].index, inplace=True)
 
     # output an excel file of the dataframe
-    capital_df.to_csv('WeatherDashboard/data/countries_capitals.csv', index=False, encoding='utf-8-sig')
+    capital_df.to_csv('WeatherDashboard/data/capitals.csv', index=False, encoding='utf-8-sig')
 
 def main():
     scrape_cont()

@@ -5,21 +5,21 @@ Africa,Benin
 Africa,Botswana
 Africa,Burkina Faso
 Africa,Burundi
-Africa,Cameroon 
+Africa,Cameroon
 Africa,Cape Verde
 Africa,Central African Republic
-Africa,Chad 
+Africa,Chad
 Africa,Comoros
 Africa,Republic of the Congo
-Africa,Democratic Republic of the Congo 
-Africa,Côte d'Ivoire 
+Africa,Democratic Republic of the Congo
+Africa,Ivory Coast
 Africa,Djibouti
 Africa,Equatorial Guinea
-Africa,Egypt 
+Africa,Egypt
 Africa,Eritrea
-Africa,Ethiopia 
+Africa,Ethiopia
 Africa,Gabon
-Africa,The Gambia
+Africa,Gambia
 Africa,Ghana
 Africa,Guinea
 Africa,Guinea-Bissau
@@ -32,13 +32,13 @@ Africa,Malawi
 Africa,Mali
 Africa,Mauritania
 Africa,Mauritius
-Africa,Morocco 
+Africa,Morocco
 Africa,Mozambique
 Africa,Namibia
 Africa,Niger
 Africa,Nigeria
 Africa,Rwanda
-Africa,São Tomé and Príncipe
+Africa,Sao Tome and Principe
 Africa,Senegal
 Africa,Seychelles
 Africa,Sierra Leone
@@ -46,7 +46,7 @@ Africa,Somalia
 Africa,South Africa
 Africa,South Sudan
 Africa,Sudan
-Africa,Swaziland 
+Africa,Swaziland
 Africa,Tanzania
 Africa,Togo
 Africa,Tunisia
@@ -58,12 +58,12 @@ Asia,Afghanistan
 Asia,Armenia
 Asia,Azerbaijan
 Asia,Bahrain
-Asia,Bangladesh 
+Asia,Bangladesh
 Asia,Bhutan
 Asia,Brunei
-Asia,Cambodia 
+Asia,Cambodia
 Asia,China
-Asia,East Timor 
+Asia,East Timor
 Asia,Georgia
 Asia,India
 Asia,Indonesia
@@ -71,16 +71,16 @@ Asia,Iran
 Asia,Iraq
 Asia,Israel
 Asia,Japan
-Asia,Jordan 
+Asia,Jordan
 Asia,Kazakhstan
 Asia,Kuwait
 Asia,Kyrgyzstan
 Asia,Laos
-Asia,Lebanon 
+Asia,Lebanon
 Asia,Malaysia
 Asia,Maldives
 Asia,Mongolia
-Asia,Myanmar 
+Asia,Myanmar
 Asia,Nepal
 Asia,North Korea
 Asia,Oman
@@ -95,89 +95,84 @@ Asia,South Korea
 Asia,Sri Lanka
 Asia,Syria
 Asia,Tajikistan
-Asia,Thailand 
-Asia,Turkey 
+Asia,Thailand
+Asia,Turkey
 Asia,Turkmenistan
 Asia,Taiwan
 Asia,United Arab Emirates
 Asia,Uzbekistan
 Asia,Vietnam
 Asia,Yemen
-Europe,Albania 
+Europe,Albania
 Europe,Andorra
-Europe,Austria 
-Europe,Belarus 
-Europe,Belgium 
-Europe,Bosnia and Herzegovina 
-Europe,Bulgaria 
-Europe,Croatia 
-Europe,Cyprus 
-Europe,Czech Republic 
-Europe,Denmark 
-Europe,Estonia 
-Europe,Finland 
+Europe,Austria
+Europe,Belarus
+Europe,Belgium
+Europe,Bosnia and Herzegovina
+Europe,Bulgaria
+Europe,Croatia
+Europe,Cyprus
+Europe,Czech Republic
+Europe,Denmark
+Europe,Estonia
+Europe,Finland
 Europe,Georgia
-Europe,Germany 
-Europe,Greece 
-Europe,Hungary 
-Europe,Iceland 
-Europe,Republic of Ireland 
-Europe,Italy 
-Europe,
+Europe,Germany
+Europe,Greece
+Europe,Hungary
+Europe,Iceland
+Europe,Ireland
+Europe,Italy
 Europe,Kosovo
-Europe,Latvia 
+Europe,Latvia
 Europe,Liechtenstein
-Europe,Lithuania 
+Europe,Lithuania
 Europe,Luxembourg
-Europe,North Macedonia 
+Europe,Macedonia
 Europe,Malta
 Europe,Moldova
 Europe,Monaco
-Europe,Montenegro 
-Europe,Netherlands 
-Europe,Norway 
-Europe,Poland 
+Europe,Montenegro
+Europe,Netherlands
+Europe,Norway
+Europe,Poland
 Europe,Portugal
 Europe,Romania
-Europe,Russia Moscow 
 Europe,San Marino
-Europe,Serbia 
-Europe,Slovakia 
-Europe,Slovenia 
+Europe,Serbia
+Europe,Slovakia
+Europe,Slovenia
 Europe,France
-Europe,Spain 
-Europe,Sweden 
-Europe,Switzerland 
-Europe,Turkey 
-Europe,Ukraine 
+Europe,Spain
+Europe,Sweden
+Europe,Switzerland
+Europe,Turkey
+Europe,Ukraine
 Europe,United Kingdom
-Europe,Vatican City 
+Europe,Vatican
 North America,Canada
 North America,Mexico
 North America,United States of America
-North America,Navassa Island
 North America,Puerto Rico
-North America,US Virgin Islands
+North America,U.S. Virgin Islands
 North America,Dominican Republic
-South America,Brazil 
+South America,Brazil
 South America,Argentina
 South America,Bolivia
 South America,Chile
 South America,Colombia
 South America,Ecuador
 South America,Falkland Islands
-South America,French Guiana
 South America,Guyana
 South America,Paraguay
 South America,Peru
-South America,South Georgia and the South Sandwich Islands
 South America,Suriname
 South America,Uruguay
 South America,Venezuela
 Oceania,Australia
 Oceania,Fiji
 Oceania,New Zealand
-Oceania,Federated States of Micronesia
+Oceania,Micronesia
 Oceania,Kiribati
 Oceania,Marshall Islands
 Oceania,Nauru
