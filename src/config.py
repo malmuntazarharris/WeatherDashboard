@@ -1,7 +1,7 @@
 from configparser import ConfigParser
 import os
 
-def config(filename='WeatherDashboard/src/config.ini'):
+def config(filename='C:/Users/Malcolm/Weather/WeatherDashboard/src/config.ini'):
     # create a parser
     cfg = ConfigParser()
     #create dict for params
@@ -23,3 +23,5 @@ def config(filename='WeatherDashboard/src/config.ini'):
 
     # get api key, add to dict
     return config
+
+config()

@@ -69,7 +69,7 @@ for city in cities:
         time.sleep(60) # OpenWeatherAPI limits us to 60 calls/min. When a timeout error occurs, the function waits 60 secs and tries again
         observation = mgr.weather_at_id(city.city_id)
         weather = observation.weather
-
+    # populate weather class variables
     weatherobj.weather_code = weather.weather_code
     weatherobj.ref_time = weather.reference_time('iso')
     weatherobj.sunset_time = weather.sunset_time('iso')
