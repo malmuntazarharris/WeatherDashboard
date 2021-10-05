@@ -23,5 +23,3 @@ def config(filename='C:/Users/Malcolm/Weather/WeatherDashboard/src/config.ini'):
 
     # get api key, add to dict
     return config
-
-config()
