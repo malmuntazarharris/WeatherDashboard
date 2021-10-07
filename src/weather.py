@@ -22,7 +22,7 @@ mgr = owm.weather_manager() # object to pull weather data
 reg = owm.city_id_registry() # object to pull city data
 
 # load csv
-country_df = pd.read_csv('WeatherDashboard/data/countries-capitals.csv')
+country_df = pd.read_csv('C:/Users/Malcolm/Weather/WeatherDashboard/data/countries-capitals.csv')
 
 # get names of countries
 country_names = country_df['country_name']
