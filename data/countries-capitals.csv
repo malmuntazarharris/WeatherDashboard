@@ -35,7 +35,7 @@ Burkina Faso,Ouagadougou,12.36666667,-1.516667,BF,Africa
 Burundi,Bujumbura,-3.366666667,29.35,BI,Africa
 Cambodia,Phnom Penh,11.55,104.916667,KH,Asia
 Cameroon,Yaoundé,3.866666667,11.516667,CM,Africa
-Canada,Ottawa,45.41666667,-75.7,CA,Central America
+Canada,Ottawa,45.41666667,-75.7,CA,North America
 Cape Verde,Praia,14.91666667,-23.516667,CV,Africa
 Cayman Islands,George Town,19.3,-81.383333,KY,North America
 Central African Republic,Bangui,4.366666667,18.583333,CF,Africa
@@ -129,7 +129,7 @@ Malta,Valletta,35.88333333,14.5,MT,Europe
 Marshall Islands,Majuro,7.1,171.383333,MH,Australia
 Mauritania,Nouakchott,18.06666667,-15.966667,MR,Africa
 Mauritius,Port Louis,-20.15,57.483333,MU,Africa
-Mexico,Mexico City,19.43333333,-99.133333,MX,Central America
+Mexico,Mexico City,19.43333333,-99.133333,MX,North America
 Moldova,Chisinau,47,28.85,MD,Europe
 Monaco,Monaco,43.73333333,7.416667,MC,Europe
 Mongolia,Ulaanbaatar,47.91666667,106.916667,MN,Asia
@@ -221,7 +221,7 @@ Uganda,Kampala,0.316666667,32.55,UG,Africa
 Ukraine,Kyiv,50.43333333,30.516667,UA,Europe
 United Arab Emirates,Abu Dhabi,24.46666667,54.366667,AE,Asia
 United Kingdom,London,51.5,-0.083333,GB,Europe
-United States,"Washington, D.C.",38.883333,-77,DC,Central America
+United States,"Washington, D.C.",38.883333,-77,DC,North America
 Uruguay,Montevideo,-34.85,-56.166667,UY,South America
 US Virgin Islands,Charlotte Amalie,18.35,-64.933333,VI,North America
 Uzbekistan,Tashkent,41.31666667,69.25,UZ,Asia

@@ -41,8 +41,13 @@ country_df['country_code'].replace('US', 'DC', inplace=True, regex=False) # open
 country_df['capital_name'].replace('Hanoi', 'Ha Noi', inplace=True, regex=False)
 country_df['capital_name'].replace('El-AaiÃºn', 'Laayoune', inplace=True, regex=False)
 country_df['capital_name'].replace('Lome', 'Lomé', inplace=True, regex=False)
-country_df['capital_name'].replace('Grand Turk', 'Cockburn Town', inplace=True, regex=False) # lol
+country_df['capital_name'].replace('Grand Turk', 'Cockburn Town', inplace=True, regex=False)
 country_df['capital_name'].replace('Nuku’alofa', "Nuku'alofa", inplace=True, regex=False)
+# fix mislabelled continents
+country_df.loc[(country_df['country_name']=='United States')] = [['United States','Washington, D.C.',38.883333,-77,'DC','North America']]
+country_df.loc[(country_df['country_name']=='Mexico')] = [['Mexico','Mexico City',19.43333333,-99.133333,'MX','North America']]
+country_df.loc[(country_df['country_name']=='Canada')] = [['Canada','Ottawa',45.41666667,-75.7,'CA','North America']]
+
 
 # load to csv
 country_df.to_csv('WeatherDashboard/data/countries-capitals.csv', index=False, encoding='utf-8-sig')
