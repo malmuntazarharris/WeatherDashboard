@@ -89,6 +89,10 @@ for city in cities:
     weatherobj.temperature = weather.temperature('celsius')['temp']
     weatherobj.status = weather.status
     weatherobj.d_status = weather.detailed_status
+    weatherobj.max_temp = weather.temperature('celsius')['temp_max']
+    weatherobj.min_temp = weather.temperature('celsius')['temp_min']
+    weatherobj.feels_like = weather.temperature('celsius')['feels_like']
+    weatherobj.wind_dir = weather.wind()['deg']
     weathers.append(weatherobj)
 
 # connect to weather database
@@ -100,11 +104,11 @@ cur = conn.cursor() # create new cursor method
 # sql query to insert an individual city into the postgres database
 sql_query = """INSERT INTO 
 weather_data("city_name","city_id","country_name","country_code","weather_code","ref_time","sunset_time","sunrise_time","cloud_per","rain_1h","snow_1h","w_ms",
-"humid_per","press_hpa","temperature","status","d_status")
-VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+"humid_per","press_hpa","temperature","status","d_status","wind_dir","max_temp","min_temp","feels_like")
+VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
 
 for obj in weathers:
-    cur.execute(sql_query, obj.to_tuple())  # TODO: increase the length of all the tables
+    cur.execute(sql_query, obj.to_tuple())
 # commit sql transactions
 conn.commit()
 

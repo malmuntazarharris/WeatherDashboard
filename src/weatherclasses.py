@@ -77,6 +77,10 @@ class Weather:
         self.temperature = None
         self.status = None
         self.d_status = None
+        self.wind_dir = None
+        self.max_temp = None
+        self.min_temp = None
+        self.feels_like = None
 
     def to_tuple(self):
         return (
@@ -96,5 +100,9 @@ class Weather:
             str(self.press_hpa),
             str(self.temperature),
             str(self.status),
-            str(self.d_status)
+            str(self.d_status),
+            str(self.wind_dir),
+            str(self.max_temp),
+            str(self.min_temp),
+            str(self.feels_like),
         )
