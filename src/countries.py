@@ -47,7 +47,8 @@ country_df['capital_name'].replace('Nuku’alofa', "Nuku'alofa", inplace=True, r
 country_df.loc[(country_df['country_name']=='United States')] = [['United States','Washington, D.C.',38.883333,-77,'DC','North America']]
 country_df.loc[(country_df['country_name']=='Mexico')] = [['Mexico','Mexico City',19.43333333,-99.133333,'MX','North America']]
 country_df.loc[(country_df['country_name']=='Canada')] = [['Canada','Ottawa',45.41666667,-75.7,'CA','North America']]
-
+country_df.loc[(country_df['country_name']=='Greenland')] = [['Greenland','Nuuk',64.18333333,-51.75,'GL','North America']]
+country_df.loc[(country_df['country_name']=='Saint Pierre and Miquelon')] = [['Saint Pierre and Miquelon','Saint-Pierre',46.76666667,-56.183333,'PM','North America']]
 
 # load to csv
 country_df.to_csv('WeatherDashboard/data/countries-capitals.csv', index=False, encoding='utf-8-sig')
