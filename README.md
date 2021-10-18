@@ -9,7 +9,9 @@
 
 ## Code and Resources Used 
 **Python Version:** Python 3.9.7
+
 **Packages:** pandas, numpy, pickle, beautifulsoup, psycopg2, pyowm (OpenWeatherAPI python wrapper)
+
 **Capital, Country, Continent and Coordinate Data:** http://techslides.com/list-of-countries-and-capitals
 
 ## Web Scraping
