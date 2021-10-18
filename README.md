@@ -72,6 +72,9 @@ Created a .bat file that contains the python file and weather.py and set a Windo
 
 ## Dashboard Creation
 Imported the SQL table and countries-capitals csv and created a dashboard. I also created two files with images of capitals and weather icons that could be pulled into the dashboard in the City Detail view.
+
+https://github.com/malmuntazarharris/WeatherDashboard/tree/main/dashboard
+
 ![At A Glance](https://user-images.githubusercontent.com/29358953/137786552-aa9905d8-d548-408e-90e4-fa1e6afff7bb.png)
 ![City Detail](https://user-images.githubusercontent.com/29358953/137786556-9c9f9fc9-3002-4123-abef-174487025114.png)
 
