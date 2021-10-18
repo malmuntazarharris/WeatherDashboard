@@ -2,7 +2,7 @@
 * Scraped a list of countries, capitals, continents and their coordinate locations
 * Cleaned the data from the scraped website and replaced incorrect/mispelled values
 * Created classes in Python to represent cities, countries and weather for the city
-* Pulled weather data using OpenWeather.org API
+* Pulled weather data using OpenWeatherMap.org API
 * Stored weather data in PostgresSQL database
 * Set a windows task to run python script daily
 * Displayed data in PowerBI
